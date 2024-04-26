@@ -1,0 +1,203 @@
+{
+    /*
+    The GLUCK mod makes most if not all Glock 17 mods work on the glock 18c
+    */
+    "GLUCK": true,
+
+    /*
+    The M14 mod makes the M1A have the fire rate of the M14, and turns it select fire.
+    */
+    "M14": true,
+
+    /*
+    The Grenade launcher ergo mod adjusts grenade launcher ergo
+    It the GLs will be SET to the new value
+    */
+    "GrenadeLauncherErgo": true,
+    "GrenadeLauncherErgoValue": -10,
+
+    /*
+    The pistol scopes mod currently adds 
+    M700 extended multi-slot Weaver rail base to the USP45
+    UM Tactical UM3 pistol sight mount to the Rhino 357
+    FN Five-seveN MK2 RMR mount to the Rhino 357
+    */
+    "PistolScopes": true,
+
+    /*
+    The UMP drum adds a new .45 ACP drum mag to the game.
+    If other mods copy settings the UMP or Vector, you want to run this mod first to ensure that any
+        copies get the new mags.
+    If desired, it will be added it to the vector too.
+    If desired, it will be added to mechanic and peacekeeper level 3. 
+
+    */
+    "UMPDrum": true,
+    "UMPDrumVector": true,
+    "UMPDrumAddToTraders": true,
+
+    /*
+    The key durability mod makes all non-marked (and similiar) keys infinite uses, while leaving marked (and similar) keys at their original uses.
+    */
+    "keyDurability": true,
+
+    /*
+    Adds names to the namelist of PMCs
+    */
+    "namelister": true,
+    "IAmAScumAndWantToRemoveSupporterNames": false, //Removes the default supporer names from the namepool.
+    "namesToAdd": //You can add more, just add more lines. Remember to follow json standard. Don't have a trailing comma etc.
+    [
+        "Fusken",
+        "Tusken",
+        "Snusken",
+        "Kusken",
+        "Rickard",
+        "Krille",
+        "Butler",
+        "Skiftnycklar",
+        "Yääääää",
+        "Härskartekniker",
+        "Ansiktet",
+        "Den är ful",
+        "Vad är det med?",
+        "kekwa",
+        "Neruo-sama",
+        "Evil Neuro",
+        "Vedal987",
+        "Hololive",
+        "Sui-chan",
+        "waaaaaa",
+        "Kyou mou kawaii",
+        "Löf",
+        "Hälsa till morsan",
+        "Linköping",
+        "Brittmarie",
+        "Kör för fa-an",
+        "Andrén",
+        "Carl",
+        "Walk",
+        "Sola",
+        "Ursäkter",
+        "Pang! Kniv i magen",
+        "Drogögon",
+        "Mitt",
+        "i",
+        "Interupptions",
+        "Spanjoren",
+        "Sosske",
+        "Redsky Gaming",
+        "Rexxar Cool",
+        "Båthuset",
+        "Törstig",
+        "Kom igen nu",
+        "Anne-Li",
+        "Brownpath"
+    ],
+
+    /*
+    zeroToHeroPouch replaces the alpha container with the waist pouch
+    */
+    "zeroToHeroPouch": true,
+
+    /*
+    Override the minimum level to access the ragfair
+    */
+    "ragfairLevelOverride": true,
+    "ragFairMinUserLevel": 99,
+
+    /*
+    Adds the AK-105 compatible muzzles to the AK-12
+    */
+    "AK12Muzzles": true,
+
+    /*
+    Changes name and description of the fake-ass vodka added by some stupid ass event. Can you tell I'm upset? I Can.
+    */
+    "fuckfakevodka": true,
+
+    /*
+    Bot tier level adjustments
+    */
+    "botRangeAdjustment": true,
+    "levelRanges": //Yes the 31-40 range is missing, this is intentional because of how the data is structured. 
+    //Basically leaving an empty range puts in the default values. You want a non-existing range for this.
+    [
+        {
+            "min": 1,
+            "max": 17
+        },
+        {
+            "min": 18,
+            "max": 30
+        },
+        {
+            "min": 41,
+            "max": 50
+        },
+        {
+            "min": 51,
+            "max": 100
+        }
+    ],
+
+    /*
+    Adds handguards from other AKs to the RPD, and allows muzzles from the AK103 on the RPD barrel
+    */
+    "rpdmods": true,
+
+    /*
+    Nerfs the spawn rate of gingy keychains from scavs
+    */
+    "scavgingynerf": true,
+
+
+    /*
+    Remvoes the rusted bloody key from fence.
+    */
+    "enableFenceBlacklist": true,
+    "fenceBlacklist": [
+        "64d4b23dc1b37504b41ac2b6", //Rusted Bloody Key
+        "5e4abc6786f77406812bd572" //Medical backpack
+    ],
+
+    /*
+    Adds the m203 to the usp. Deal with it.
+    */
+    "memeUSP45": true,
+
+    /*
+    Reduce the trader refresh time.
+    */
+    "enableTraderRefreshAdjustment": true, //Enable the trader refresh time adjustment.
+    "traderRefreshTimeAdjustmentMin": 0, //How much to adjust the minimum refresh time by. 
+    "traderRefreshTimeAdjustmentMax": -5400, //How much to adjust the maximum refresh time by. 
+    "traderRefreshTimeAdjustmentLimit": 3600, //Time will never go below this value. 
+
+
+    /*
+    Reduce ergonomics penality on suppressors
+    */
+    "enableSuppressorErgoAdjustment": true, //Enable the suppressor ergo adjustment.
+    "suppressorErgoAdjustment": 10, //How much to adjust the ergonomics by.
+
+    /*
+    * Adds shorter barrels to the M700
+    */
+    "m700Barrel": true,
+
+    /*
+    Allow the flaregun to be added to special slots.
+    */
+    "flareSpecial": true,
+
+    /*
+    Buff shturman's key chance.
+    */
+    "shturmanKeyBuff": true,
+    /*
+   A
+    */
+    "debug": false
+    //Mods that I want to make
+}
