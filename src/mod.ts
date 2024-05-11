@@ -169,13 +169,14 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         {
             this.db.getTables().bots.types.bosskojaniy.generation.items.pocketLoot.weights =
             {
-                "0": 0,
-                "1": 1,
+                "0": 3,
+                "1": 3,
                 "2": 3,
-                "3": 5,
-                "4": 2
+                "3": 3,
+                "4": 3
             };
             this.db.getTables().bots.types.bosskojaniy.inventory.items.Pockets[ "5d08d21286f774736e7c94c3" ] = 3500;
+            this.db.getTables().bots.types.bosskojaniy.inventory.items.Backpack[ "5d08d21286f774736e7c94c3" ] = 3500;
         }
 
         //point output
