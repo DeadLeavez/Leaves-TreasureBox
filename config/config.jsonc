@@ -119,7 +119,7 @@
     /*
     Bot tier level adjustments
     */
-    "botRangeAdjustment": true,
+    "botRangeAdjustment": false,
     "levelRanges": //Yes the 31-40 range is missing, this is intentional because of how the data is structured. 
     //Basically leaving an empty range puts in the default values. You want a non-existing range for this.
     [

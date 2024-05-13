@@ -1,28 +1,28 @@
-import { DependencyContainer } from "tsyringe";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
-import { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import type { DependencyContainer } from "tsyringe";
+import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import type { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
+import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
+import type { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
 
-import { VFS } from "@spt-aki/utils/VFS";
+import type { VFS } from "@spt-aki/utils/VFS";
 import { jsonc } from "jsonc";
-import * as path from "path";
+import * as path from "node:path";
 import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import type { Item } from "@spt-aki/models/eft/common/tables/IItem";
 
 //item creation
-import { CustomItemService } from "@spt-aki/services/mod/CustomItemService";
-import { NewItemFromCloneDetails } from "@spt-aki/models/spt/mod/NewItemDetails";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { IBarterScheme } from "@spt-aki/models/eft/common/tables/ITrader";
-import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
+import type { CustomItemService } from "@spt-aki/services/mod/CustomItemService";
+import type { NewItemFromCloneDetails } from "@spt-aki/models/spt/mod/NewItemDetails";
+import type { HashUtil } from "@spt-aki/utils/HashUtil";
+import type { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import type { IBarterScheme } from "@spt-aki/models/eft/common/tables/ITrader";
+import type { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
 import { Money } from "@spt-aki/models/enums/Money";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig"
+import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
+import type { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import type { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
-import { ITraderConfig } from "@spt-aki/models/spt/config/ITraderConfig";
+import type { ITraderConfig } from "@spt-aki/models/spt/config/ITraderConfig";
 
 class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
 {
@@ -60,7 +60,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         }
     }
 
-    public postDBLoad( container: DependencyContainer ): void 
+    public postDBLoad( container: DependencyContainer ): void
     {
         // Get stuff from container
         this.db = container.resolve<DatabaseServer>( "DatabaseServer" );
@@ -71,7 +71,6 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         this.customItemService = container.resolve<CustomItemService>( "CustomItemService" );
         this.botConfig = this.configServer.getConfig<IBotConfig>( ConfigTypes.BOT );
 
-
         // Get tables from database
         const tables = this.db.getTables();
         // Get item database from tables
@@ -79,7 +78,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
 
         this.printColor( "[TreasureBox] PostDB Starting" );
 
-        const mods = [ "GLUCK", "M14", "GrenadeLauncherErgo", "PistolScopes", "UMPDrum", "keyDurability", "namelister" ]
+        const mods = [ "GLUCK", "M14", "GrenadeLauncherErgo", "PistolScopes", "UMPDrum", "keyDurability", "namelister" ];
 
         if ( this.config.GLUCK )
         {
@@ -112,7 +111,6 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         if ( this.config.zeroToHeroPouch )
         {
             this.zeroToHeroPouch( tables );
-
         }
         if ( this.config.ragfairLevelOverride )
         {
@@ -160,20 +158,19 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         if ( this.config.flareSpecial )
         {
             const pocketsInventroy = "627a4e6b255f7527fb05a0f6";
-            const flaregunID = "620109578d82e67e7911abf2"
+            const flaregunID = "620109578d82e67e7911abf2";
             this.itemDB[ pocketsInventroy ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( flaregunID );
             this.itemDB[ pocketsInventroy ]._props.Slots[ 1 ]._props.filters[ 0 ].Filter.push( flaregunID );
             this.itemDB[ pocketsInventroy ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter.push( flaregunID );
         }
         if ( this.config.shturmanKeyBuff )
         {
-            this.db.getTables().bots.types.bosskojaniy.generation.items.pocketLoot.weights =
-            {
+            this.db.getTables().bots.types.bosskojaniy.generation.items.pocketLoot.weights = {
                 "0": 3,
                 "1": 3,
                 "2": 3,
                 "3": 3,
-                "4": 3
+                "4": 3,
             };
             this.db.getTables().bots.types.bosskojaniy.inventory.items.Pockets[ "5d08d21286f774736e7c94c3" ] = 3500;
             this.db.getTables().bots.types.bosskojaniy.inventory.items.Backpack[ "5d08d21286f774736e7c94c3" ] = 3500;
@@ -203,7 +200,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         this.printColor( "[TreasureBox] Suppressor Ergo Adjustment", LogTextColor.CYAN );
         for ( const item in this.itemDB )
         {
-            if ( this.itemDB[ item ]._parent == suppressorParent )
+            if ( this.itemDB[ item ]._parent === suppressorParent )
             {
                 this.itemDB[ item ]._props.Ergonomics += this.config.suppressorErgoAdjustment;
             }
@@ -242,14 +239,14 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
             "57347c5b245977448d35f6e1",
             "5734795124597738002c6176",
             "57347c77245977448d35f6e2",
-            "5448be9a4bdc2dfd2f8b456a"
+            "5448be9a4bdc2dfd2f8b456a",
         ];
 
         //Reduce weighting of it on regular scavs
         scav.inventory.items.Pockets[ gingyID ] *= 0.1;
 
         //Fill the pockets of sniper scavs with junk stuff
-        for ( let entry of items )
+        for ( const entry of items )
         {
             sscav.inventory.items.Pockets[ entry ] = 50;
         }
@@ -270,7 +267,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         const adjustmentMax = this.config.traderRefreshTimeAdjustmentMax;
         const adjustmentLimit = this.config.traderRefreshTimeAdjustmentLimit;
         const updateTimes = this.traderConfig.updateTime;
-        for ( let trader of updateTimes )
+        for ( const trader of updateTimes )
         {
             trader.seconds.min += adjustmentMin;
             trader.seconds.max += adjustmentMax;
@@ -298,7 +295,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
 
         for ( const entry of fenceBlacklist )
         {
-            this.printColor( "[TreasureBox] \tBlacklisting: " + entry, LogTextColor.YELLOW );
+            this.printColor( `[TreasureBox] \tBlacklisting: ${ entry }`, LogTextColor.YELLOW );
             this.traderConfig.fence.blacklist.push( entry );
         }
         //this.debugJsonOutput( this.traderConfig.fence.blacklist, "Fence Blacklist" );
@@ -369,9 +366,9 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
     {
         this.printColor( "[TreasureBox] Fuck Fake Vodka", LogTextColor.CYAN );
         const fakeVodkaID = "614451b71e5874611e2c7ae5";
-        tables.locales.global.en[ fakeVodkaID + " Name" ] = "Fake Vodka from Hell";
-        tables.locales.global.en[ fakeVodkaID + " ShortName" ] = "ASS Vodka";
-        tables.locales.global.en[ fakeVodkaID + " Description" ] =
+        tables.locales.global.en[ `${ fakeVodkaID } Name` ] = "Fake Vodka from Hell";
+        tables.locales.global.en[ `${ fakeVodkaID } ShortName` ] = "ASS Vodka";
+        tables.locales.global.en[ `${ fakeVodkaID } Description` ] =
             "What you've just found is one of the most insanely idiotic things someone has ever brewed. " +
             "At no point in it's awful, incoherent brewing was it even close to anything that could be considered a reasonable vodka. " +
             "Everyone in tarkov is now dumber for having tasted it. I award it no points, and may God have mercy on it's soul. ";
@@ -384,36 +381,36 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         const ak105 = "5ac66d9b5acfc4001633997a";
 
         const ak105filters = tables.templates.items[ ak105 ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter;
-        let ak12filters = tables.templates.items[ ak12 ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter;
+        const ak12filters = tables.templates.items[ ak12 ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter;
         let count = 0;
         for ( const item of ak105filters )
         {
             ak12filters.push( item );
-            count++
+            count++;
         }
-        this.printColor( "[TreasureBox] \tAdded this many new muzzles to the ak12: " + count, LogTextColor.YELLOW );
+        this.printColor( `[TreasureBox] \tAdded this many new muzzles to the ak12: ${ count }`, LogTextColor.YELLOW );
     }
 
     private ragfairMinLevelOverride( tables: IDatabaseTables )
     {
         this.printColor( "[TreasureBox] Ragfail min level override enabled", LogTextColor.CYAN );
         tables.globals.config.RagFair.minUserLevel = this.config.ragFairMinUserLevel;
-        this.printColor( "[TreasureBox] \tRagfair min level overriden to: " + this.config.ragFairMinUserLevel, LogTextColor.YELLOW );
+        this.printColor( `[TreasureBox] \tRagfair min level overriden to: ${ this.config.ragFairMinUserLevel }`, LogTextColor.YELLOW );
     }
 
     private zeroToHeroPouch( tables: IDatabaseTables )
     {
         this.printColor( "[TreasureBox] Zero to Hero pouch Enabled", LogTextColor.CYAN );
-        for ( let item of tables.templates.profiles[ "SPT Zero to hero" ].bear.character.Inventory.items )
+        for ( const item of tables.templates.profiles[ "SPT Zero to hero" ].bear.character.Inventory.items )
         {
-            if ( item._tpl == "544a11ac4bdc2d470e8b456a" )
+            if ( item._tpl === "544a11ac4bdc2d470e8b456a" )
             {
                 item._tpl = "5732ee6a24597719ae0c0281";
             }
         }
-        for ( let item of tables.templates.profiles[ "SPT Zero to hero" ].usec.character.Inventory.items )
+        for ( const item of tables.templates.profiles[ "SPT Zero to hero" ].usec.character.Inventory.items )
         {
-            if ( item._tpl == "544a11ac4bdc2d470e8b456a" )
+            if ( item._tpl === "544a11ac4bdc2d470e8b456a" )
             {
                 item._tpl = "5732ee6a24597719ae0c0281";
             }
@@ -430,10 +427,10 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
             tables.bots.types.bear.firstName = [];
         }
 
-        let namelistUsec = tables.bots.types.usec.firstName;
-        let namelistBear = tables.bots.types.bear.firstName;
+        const namelistUsec = tables.bots.types.usec.firstName;
+        const namelistBear = tables.bots.types.bear.firstName;
 
-        for ( let name of this.config.namesToAdd )
+        for ( const name of this.config.namesToAdd )
         {
             namelistUsec.push( name );
             namelistBear.push( name );
@@ -445,10 +442,10 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         this.printColor( "[TreasureBox] KeyDurability Enabled", LogTextColor.CYAN );
         const keys = [ "5780cf7f2459777de4559322", "5d80c60f86f77440373c4ece", "5d80c62a86f7744036212b3f", "5ede7a8229445733cb4c18e2", "62987dfc402c7f69bf010923", "63a3a93f8a56922e82001f5d", "64ccc25f95763a1ae376e447", "64d4b23dc1b37504b41ac2b6", "5d08d21286f774736e7c94c3" ];
 
-        for ( let item in this.itemDB )
+        for ( const item in this.itemDB )
         {
             // Find all keys
-            if ( this.itemDB[ item ]._parent == "5c99f98d86f7745c314214b3" && !keys.includes( this.itemDB[ item ]._id ) )
+            if ( this.itemDB[ item ]._parent === "5c99f98d86f7745c314214b3" && !keys.includes( this.itemDB[ item ]._id ) )
             {
                 this.itemDB[ item ]._props.MaximumNumberOfUsage = 0;
             }
@@ -468,7 +465,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         //const newName = this.itemDB[weapon]._name;
         const newName = newLocaleName;
         const price = 25000;
-        const newID = m4drumID + "45mod";
+        const newID = `${ m4drumID }45mod`;
 
         const leaves45: NewItemFromCloneDetails = {
             itemTplToClone: m4drumID,
@@ -482,19 +479,13 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
                         _props: {
                             filters: [
                                 {
-                                    Filter: [
-                                        "5e81f423763d9f754677bf2e",
-                                        "5efb0cabfb3e451d70735af5",
-                                        "5efb0fc6aeb21837e749c801",
-                                        "5efb0d4f4bc50b58e81710f3",
-                                        "5ea2a8e200685063ec28c05a"
-                                    ]
-                                }
-                            ]
+                                    Filter: [ "5e81f423763d9f754677bf2e", "5efb0cabfb3e451d70735af5", "5efb0fc6aeb21837e749c801", "5efb0d4f4bc50b58e81710f3", "5ea2a8e200685063ec28c05a" ],
+                                },
+                            ],
                         },
-                        _proto: "5748538b2459770af276a261"
-                    }
-                ]
+                        _proto: "5748538b2459770af276a261",
+                    },
+                ],
             },
             newId: newID,
             parentId: "5448bc234bdc2d3c308b4569",
@@ -502,41 +493,38 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
             fleaPriceRoubles: price,
             handbookPriceRoubles: price,
             locales: {
-                "en": {
+                en: {
                     name: newLocaleName,
 
                     shortName: newName,
-                    description: "Drum mag for the UMP45 HELL YISS BRUTHA."
-                }
-            }
+                    description: "Drum mag for the UMP45 HELL YISS BRUTHA.",
+                },
+            },
         };
 
         this.customItemService.createItemFromClone( leaves45 );
-
 
         //Add the mag to the ump
         this.itemDB[ "5fc3e272f8b6a877a729eac5" ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( newID );
 
         if ( this.config.UMPDrumVector )
         {
-
             this.printColor( "[TreasureBox] \tUMPDrum enabled for vector.", LogTextColor.YELLOW );
 
             //Add the mag to the vector
             this.itemDB[ "5fb64bc92b1b027b1f50bcf2" ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( newID );
         }
 
-        let item = this.itemDB[ newID ];
+        const item = this.itemDB[ newID ];
 
         if ( this.config.UMPDrumAddToTraders )
         {
-
             this.printColor( "[TreasureBox] \tUMPDrum added to traders.", LogTextColor.YELLOW );
 
             // Create barter scheme object
             const barterSchemeToAdd: IBarterScheme = {
                 count: this.handbookHelper.getTemplatePrice( newID ),
-                _tpl: Money.ROUBLES
+                _tpl: Money.ROUBLES,
             };
 
             // Create item object
@@ -547,10 +535,9 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
                 slotId: "hideout",
                 upd: {
                     StackObjectsCount: 9999999,
-                    UnlimitedCount: true
-                }
+                    UnlimitedCount: true,
+                },
             };
-
 
             const pkassort = this.db.getTables().traders[ peacekeeperID ].assort;
             const meassort = this.db.getTables().traders[ mechanicID ].assort;
@@ -573,7 +560,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         //Add mount to the USP red dot thing
         this.itemDB[ "61963a852d2c397d660036ad" ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( "5bfebc530db834001d23eb65" );
 
-        //Rino 357 - UM Tactical UM3 pistol sight mount
+        //Rhino 357 - UM Tactical UM3 pistol sight mount
         this.itemDB[ "61a4c8884f95bc3b2c5dc96f" ]._props.Slots[ 4 ]._props.filters[ 0 ].Filter.push( "5a7b4900e899ef197b331a2a" );
         //Rino 357 - FN Five-seveN MK2 RMR mount
         this.itemDB[ "61a4c8884f95bc3b2c5dc96f" ]._props.Slots[ 1 ]._props.filters[ 0 ].Filter.push( "5d7b6bafa4b93652786f4c76" );
@@ -583,14 +570,13 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
     {
         this.printColor( "[TreasureBox] GrenadeLauncherErgo enabled.", LogTextColor.CYAN );
 
-        for ( let item in this.itemDB )
+        for ( const item in this.itemDB )
         {
             // Find all launchers
-            if ( this.itemDB[ item ]._parent == "55818b014bdc2ddc698b456b" )
+            if ( this.itemDB[ item ]._parent === "55818b014bdc2ddc698b456b" )
             {
-                var temp = this.itemDB[ item ]._props.Ergonomics;
                 this.itemDB[ item ]._props.Ergonomics = -10;
-                this.printColor( "[TreasureBox] \tGrenadeLauncherErgo - Edited." + this.itemDB[ item ]._name + " to " + this.config.GrenadeLauncherErgoValue, LogTextColor.YELLOW );
+                this.printColor( `[TreasureBox] \tGrenadeLauncherErgo - Edited. ${ this.itemDB[ item ]._name } to ${ this.config.GrenadeLauncherErgoValue }`, LogTextColor.YELLOW );
             }
         }
     }
@@ -608,11 +594,11 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         this.printColor( "[TreasureBox] GLUCK enabled.", LogTextColor.CYAN );
         const glock17 = this.itemDB[ "5a7ae0c351dfba0017554310" ];
 
-        var glock18 = this.itemDB[ "5b1fa9b25acfc40018633c01" ];
+        const glock18 = this.itemDB[ "5b1fa9b25acfc40018633c01" ];
 
         for ( let i = 0; i < glock18._props.Slots.length; i++ )
         {
-            for ( let filterID in glock17._props.Slots[ i ]._props.filters[ 0 ].Filter )
+            for ( const filterID in glock17._props.Slots[ i ]._props.filters[ 0 ].Filter )
             {
                 glock18._props.Slots[ i ]._props.filters[ 0 ].Filter.push( glock17._props.Slots[ i ]._props.filters[ 0 ].Filter[ filterID ] );
             }
@@ -624,29 +610,29 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         this.logger.logWithColor( message, color );
     }
 
-    private debugJsonOutput( jsonObject: any, label: string = "" )
+    private debugJsonOutput( jsonObject: any, label = "" )
     {
         //if ( this.config.debug )
         //{
         if ( label.length > 0 )
         {
-            this.logger.logWithColor( "[" + label + "]", LogTextColor.GREEN );
+            this.logger.logWithColor( `[${ label }]`, LogTextColor.GREEN );
         }
         this.logger.logWithColor( JSON.stringify( jsonObject, null, 4 ), LogTextColor.MAGENTA );
         //}
     }
-    private writeResult( prefix: string, data: any, extension: string = ".json" ): void
+    private writeResult( prefix: string, data: any, extension = ".json" ): void
     {
         // get formatted text to save
         const text = this.jsonUtil.serialize( data, true );
 
         // get file name
-        const fileName = "E:/SPT-AKI/SPT-3.8.0-2024-03-29-50f50808/user/mods/leaves-treasurebox/" + prefix + extension;
+        const fileName = `E:/SPT-AKI/SPT-3.8.0-2024-03-29-50f50808/user/mods/leaves-treasurebox/${ prefix }${ extension }`;
 
         // save file
         this.vfs.writeFile( fileName, text );
-        this.logger.info( "Written results to: " + fileName );
+        this.logger.info( `Written results to: ${ fileName }` );
     }
 }
 
-module.exports = { mod: new TreasureBox() }
+module.exports = { mod: new TreasureBox() };
