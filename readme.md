@@ -33,6 +33,7 @@ Has a ton of small mods I personally made for myself. Everything is toggle-able 
  Initial Release
 
 ## 1.1.0
+Added the following options
 - Nerf the spawn rate of gingy key-chains from scavs
 - Removes the rusted bloody key from fence.
 - Adds the m203 to the usp. Deal with it.

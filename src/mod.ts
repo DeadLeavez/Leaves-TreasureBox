@@ -157,11 +157,11 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         }
         if ( this.config.flareSpecial )
         {
-            const pocketsInventroy = "627a4e6b255f7527fb05a0f6";
+            const pocketsInventory = "627a4e6b255f7527fb05a0f6";
             const flaregunID = "620109578d82e67e7911abf2";
-            this.itemDB[ pocketsInventroy ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( flaregunID );
-            this.itemDB[ pocketsInventroy ]._props.Slots[ 1 ]._props.filters[ 0 ].Filter.push( flaregunID );
-            this.itemDB[ pocketsInventroy ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter.push( flaregunID );
+            this.itemDB[ pocketsInventory ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( flaregunID );
+            this.itemDB[ pocketsInventory ]._props.Slots[ 1 ]._props.filters[ 0 ].Filter.push( flaregunID );
+            this.itemDB[ pocketsInventory ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter.push( flaregunID );
         }
         if ( this.config.shturmanKeyBuff )
         {
