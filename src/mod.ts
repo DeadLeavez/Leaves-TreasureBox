@@ -23,6 +23,7 @@ import type { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import type { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
 import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
 import type { ITraderConfig } from "@spt-aki/models/spt/config/ITraderConfig";
+import type { IGlobals } from "@spt-aki/models/eft/common/IGlobals";
 
 class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
 {
@@ -41,6 +42,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
     private configServer: ConfigServer;
     private botConfig: IBotConfig;
     private traderConfig: ITraderConfig;
+    private globals:IGlobals;
 
     public preAkiLoad( container: DependencyContainer ): void
     {
@@ -70,6 +72,8 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         this.handbookHelper = container.resolve<HandbookHelper>( "HandbookHelper" );
         this.customItemService = container.resolve<CustomItemService>( "CustomItemService" );
         this.botConfig = this.configServer.getConfig<IBotConfig>( ConfigTypes.BOT );
+        this.globals = this.db.getTables().globals;
+        
 
         // Get tables from database
         const tables = this.db.getTables();
@@ -175,7 +179,14 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
             this.db.getTables().bots.types.bosskojaniy.inventory.items.Pockets[ "5d08d21286f774736e7c94c3" ] = 3500;
             this.db.getTables().bots.types.bosskojaniy.inventory.items.Backpack[ "5d08d21286f774736e7c94c3" ] = 3500;
         }
-
+        if ( this.config.disableCoopReward )
+        {
+            this.traderConfig.fence.coopExtractGift.sendGift = false;
+        }
+        if ( this.config.disableFenceRepReward )
+        {
+            this.globals.config.FenceSettings.paidExitStandingNumerator = 0;
+        }
         //point output
         if ( this.config.debug )
         {

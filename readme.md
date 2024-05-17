@@ -42,3 +42,7 @@ Added the following options
 - Adds shorter barrels to the M700
 - Allow the flare-gun to be added to special slots.
 - Buff shturman's key chance.
+
+## 1.2.0
+Added the following options
+- Disable coop extract rewards.

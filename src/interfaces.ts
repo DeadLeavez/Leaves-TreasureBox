@@ -33,6 +33,8 @@ interface IConfig {
   flareSpecial: boolean;
   debug: boolean;
   shturmanKeyBuff: boolean;
+  disableCoopReward: boolean;
+  disableFenceRepReward: boolean;
 }
 
 interface LevelRange {

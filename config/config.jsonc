@@ -195,6 +195,12 @@
     Buff shturman's key chance.
     */
     "shturmanKeyBuff": true,
+
+    /*
+    TODO: ADD DESC
+    */
+    "disableCoopReward": true,
+    "disableFenceRepReward": true,
     /*
    A
     */
