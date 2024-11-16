@@ -1,31 +1,31 @@
 import type { DependencyContainer } from "tsyringe";
-import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import type { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
-import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod";
-import type { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import type { ILogger } from "@spt/models/spt/utils/ILogger";
+import type { IPostDBLoadMod } from "@spt/models/external/IPostDBLoadMod";
+import type { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
+import type { DatabaseServer } from "@spt/servers/DatabaseServer";
 
-import type { VFS } from "@spt-aki/utils/VFS";
+import type { VFS } from "@spt/utils/VFS";
 import { jsonc } from "jsonc";
 import * as path from "node:path";
-import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
-import type { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
+import type { IItem } from "@spt/models/eft/common/tables/IItem";
 
 //item creation
-import type { CustomItemService } from "@spt-aki/services/mod/CustomItemService";
-import type { NewItemFromCloneDetails } from "@spt-aki/models/spt/mod/NewItemDetails";
-import type { HashUtil } from "@spt-aki/utils/HashUtil";
-import type { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import type { IBarterScheme } from "@spt-aki/models/eft/common/tables/ITrader";
-import type { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
-import { Money } from "@spt-aki/models/enums/Money";
-import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import type { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import type { IBotConfig } from "@spt-aki/models/spt/config/IBotConfig";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
-import type { ITraderConfig } from "@spt-aki/models/spt/config/ITraderConfig";
-import type { IGlobals } from "@spt-aki/models/eft/common/IGlobals";
+import type { CustomItemService } from "@spt/services/mod/CustomItemService";
+import type { NewItemFromCloneDetails } from "@spt/models/spt/mod/NewItemDetails";
+import type { HashUtil } from "@spt/utils/HashUtil";
+import type { JsonUtil } from "@spt/utils/JsonUtil";
+import type { IBarterScheme } from "@spt/models/eft/common/tables/ITrader";
+import type { HandbookHelper } from "@spt/helpers/HandbookHelper";
+import { Money } from "@spt/models/enums/Money";
+import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import type { ConfigServer } from "@spt/servers/ConfigServer";
+import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
+import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
+import type { ITraderConfig } from "@spt/models/spt/config/ITraderConfig";
+import type { IGlobals } from "@spt/models/eft/common/IGlobals";
 
-class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
+class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
 {
     private logger: ILogger;
     private db: DatabaseServer;
@@ -44,7 +44,7 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
     private traderConfig: ITraderConfig;
     private globals:IGlobals;
 
-    public preAkiLoad( container: DependencyContainer ): void
+    public preSptLoad( container: DependencyContainer ): void
     {
         this.vfs = container.resolve<VFS>( "VFS" );
         const configFile = path.resolve( __dirname, "../config/config.jsonc" );
@@ -96,21 +96,9 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         {
             this.GrenadeLauncherErgo();
         }
-        if ( this.config.PistolScopes )
-        {
-            this.PistolScopes();
-        }
         if ( this.config.UMPDrum )
         {
             this.UMPDrum();
-        }
-        if ( this.config.keyDurability )
-        {
-            this.KeyDurability();
-        }
-        if ( this.config.namelister )
-        {
-            this.Namelister( tables );
         }
         if ( this.config.zeroToHeroPouch )
         {
@@ -127,10 +115,6 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         if ( this.config.fuckfakevodka )
         {
             this.fakevodkafix( tables );
-        }
-        if ( this.config.botRangeAdjustment )
-        {
-            this.botRangeAdjustment();
         }
         if ( this.config.rpdmods )
         {
@@ -166,26 +150,6 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
             this.itemDB[ pocketsInventory ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( flaregunID );
             this.itemDB[ pocketsInventory ]._props.Slots[ 1 ]._props.filters[ 0 ].Filter.push( flaregunID );
             this.itemDB[ pocketsInventory ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter.push( flaregunID );
-        }
-        if ( this.config.shturmanKeyBuff )
-        {
-            this.db.getTables().bots.types.bosskojaniy.generation.items.pocketLoot.weights = {
-                "0": 3,
-                "1": 3,
-                "2": 3,
-                "3": 3,
-                "4": 3,
-            };
-            this.db.getTables().bots.types.bosskojaniy.inventory.items.Pockets[ "5d08d21286f774736e7c94c3" ] = 3500;
-            this.db.getTables().bots.types.bosskojaniy.inventory.items.Backpack[ "5d08d21286f774736e7c94c3" ] = 3500;
-        }
-        if ( this.config.disableCoopReward )
-        {
-            this.traderConfig.fence.coopExtractGift.sendGift = false;
-        }
-        if ( this.config.disableFenceRepReward )
-        {
-            this.globals.config.FenceSettings.paidExitStandingNumerator = 0;
         }
         //point output
         if ( this.config.debug )
@@ -341,18 +305,6 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
         }
     }
 
-    private botRangeAdjustment()
-    {
-        this.printColor( "[TreasureBox] Bot Level Range Adjustment", LogTextColor.CYAN );
-        const ranges = this.botConfig.equipment.pmc.weightingAdjustmentsByBotLevel;
-        const configRanges = this.config.levelRanges;
-        for ( let i = 0; i < configRanges.length; i++ )
-        {
-            ranges[ i ].levelRange.min = configRanges[ i ].min;
-            ranges[ i ].levelRange.max = configRanges[ i ].max;
-        }
-    }
-
     private withinCoords( position: any )
     {
         const x = position.x;
@@ -424,41 +376,6 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
             if ( item._tpl === "544a11ac4bdc2d470e8b456a" )
             {
                 item._tpl = "5732ee6a24597719ae0c0281";
-            }
-        }
-    }
-
-    private Namelister( tables: IDatabaseTables )
-    {
-        this.printColor( "[TreasureBox] Namelister Enabled", LogTextColor.CYAN );
-
-        if ( this.config.IAmAScumAndWantToRemoveSupporterNames )
-        {
-            tables.bots.types.usec.firstName = [];
-            tables.bots.types.bear.firstName = [];
-        }
-
-        const namelistUsec = tables.bots.types.usec.firstName;
-        const namelistBear = tables.bots.types.bear.firstName;
-
-        for ( const name of this.config.namesToAdd )
-        {
-            namelistUsec.push( name );
-            namelistBear.push( name );
-        }
-    }
-
-    private KeyDurability()
-    {
-        this.printColor( "[TreasureBox] KeyDurability Enabled", LogTextColor.CYAN );
-        const keys = [ "5780cf7f2459777de4559322", "5d80c60f86f77440373c4ece", "5d80c62a86f7744036212b3f", "5ede7a8229445733cb4c18e2", "62987dfc402c7f69bf010923", "63a3a93f8a56922e82001f5d", "64ccc25f95763a1ae376e447", "64d4b23dc1b37504b41ac2b6", "5d08d21286f774736e7c94c3" ];
-
-        for ( const item in this.itemDB )
-        {
-            // Find all keys
-            if ( this.itemDB[ item ]._parent === "5c99f98d86f7745c314214b3" && !keys.includes( this.itemDB[ item ]._id ) )
-            {
-                this.itemDB[ item ]._props.MaximumNumberOfUsage = 0;
             }
         }
     }
@@ -562,19 +479,6 @@ class TreasureBox implements IPostDBLoadMod, IPreAkiLoadMod
             meassort.barter_scheme[ item._id ] = [ [ barterSchemeToAdd ] ];
             meassort.loyal_level_items[ item._id ] = 3;
         }
-    }
-
-    private PistolScopes()
-    {
-        this.printColor( "[TreasureBox] PistolScopes enabled.", LogTextColor.CYAN );
-
-        //Add mount to the USP red dot thing
-        this.itemDB[ "61963a852d2c397d660036ad" ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( "5bfebc530db834001d23eb65" );
-
-        //Rhino 357 - UM Tactical UM3 pistol sight mount
-        this.itemDB[ "61a4c8884f95bc3b2c5dc96f" ]._props.Slots[ 4 ]._props.filters[ 0 ].Filter.push( "5a7b4900e899ef197b331a2a" );
-        //Rino 357 - FN Five-seveN MK2 RMR mount
-        this.itemDB[ "61a4c8884f95bc3b2c5dc96f" ]._props.Slots[ 1 ]._props.filters[ 0 ].Filter.push( "5d7b6bafa4b93652786f4c76" );
     }
 
     private GrenadeLauncherErgo()
