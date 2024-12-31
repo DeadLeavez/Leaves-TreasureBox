@@ -23,10 +23,10 @@
     If desired, it will be added it to the vector too.
     If desired, it will be added to mechanic and peacekeeper level 3. 
 
-    */ //WARNING BROKEN IN 3.9.x+
-    "UMPDrum": false,
-    "UMPDrumVector": false,
-    "UMPDrumAddToTraders": false,
+    */
+    "UMPDrum": true,
+    "UMPDrumVector": true,
+    "UMPDrumAddToTraders": true,
 
     /*
     zeroToHeroPouch replaces the alpha container with the waist pouch
@@ -55,12 +55,6 @@
     "rpdmods": true,
 
     /*
-    Nerfs the spawn rate of gingy keychains from scavs
-    */
-    "scavgingynerf": true,
-
-
-    /*
     Remvoes the rusted bloody key from fence.
     */
     "enableFenceBlacklist": true,
@@ -77,7 +71,7 @@
     /*
     Reduce the trader refresh time.
     */
-    "enableTraderRefreshAdjustment": true, //Enable the trader refresh time adjustment.
+    "enableTraderRefreshAdjustment": false, //Enable the trader refresh time adjustment.
     "traderRefreshTimeAdjustmentMin": 0, //How much to adjust the minimum refresh time by. 
     "traderRefreshTimeAdjustmentMax": -5400, //How much to adjust the maximum refresh time by. 
     "traderRefreshTimeAdjustmentLimit": 3600, //Time will never go below this value. 
@@ -95,18 +89,13 @@
     "m700Barrel": true,
 
     /*
-    Allow the flaregun to be added to special slots.
+    * Effectively removes quests from the event list, so they can be done at any time.
     */
-    "flareSpecial": true,
+    "enableQuests": true,
+    "quests":
+    [
+        "674647f38466ebb03408b291" //Thats a Great Plan Walter
+    ],
 
-    /*
-    TODO: ADD DESC
-    */
-    "disableCoopReward": true,
-    "disableFenceRepReward": true,
-    /*
-   A
-    */
     "debug": false
-    //Mods that I want to make
 }

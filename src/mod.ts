@@ -23,6 +23,8 @@ import type { ConfigServer } from "@spt/servers/ConfigServer";
 import type { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import type { ITraderConfig } from "@spt/models/spt/config/ITraderConfig";
+import type { IInventoryConfig } from "@spt/models/spt/config/IInventoryConfig";
+import type { IQuestConfig } from "@spt/models/spt/config/IQuestConfig";
 import type { IGlobals } from "@spt/models/eft/common/IGlobals";
 
 class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
@@ -42,7 +44,9 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
     private configServer: ConfigServer;
     private botConfig: IBotConfig;
     private traderConfig: ITraderConfig;
-    private globals:IGlobals;
+    private inventoryConfig: IInventoryConfig;
+    private questConfig: IQuestConfig;
+    private globals: IGlobals;
 
     public preSptLoad( container: DependencyContainer ): void
     {
@@ -53,6 +57,8 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
         this.config = jsonc.parse( this.vfs.readFile( configFile ) );
 
         this.traderConfig = this.configServer.getConfig<ITraderConfig>( ConfigTypes.TRADER );
+        this.inventoryConfig = this.configServer.getConfig<IInventoryConfig>( ConfigTypes.INVENTORY );
+        this.questConfig = this.configServer.getConfig<IQuestConfig>( ConfigTypes.QUEST );
 
         this.printColor( "[TreasureBox] preAki Starting" );
 
@@ -73,7 +79,7 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
         this.customItemService = container.resolve<CustomItemService>( "CustomItemService" );
         this.botConfig = this.configServer.getConfig<IBotConfig>( ConfigTypes.BOT );
         this.globals = this.db.getTables().globals;
-        
+
 
         // Get tables from database
         const tables = this.db.getTables();
@@ -120,10 +126,6 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
         {
             this.RPDMods( tables );
         }
-        if ( this.config.scavgingynerf )
-        {
-            this.scavgingynerf( tables );
-        }
 
         if ( this.config.memeUSP45 )
         {
@@ -139,17 +141,27 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
         }
         if ( this.config.m700Barrel )
         {
-            const m700ID = "5bfea6e90db834001b7347f3";
-            const sa58barrel = "5b099a765acfc47a8607efe3";
-            this.itemDB[ m700ID ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter.push( sa58barrel );
+            this.m700Barrel();
         }
-        if ( this.config.flareSpecial )
+        if ( this.config.enableQuests )
         {
-            const pocketsInventory = "627a4e6b255f7527fb05a0f6";
-            const flaregunID = "620109578d82e67e7911abf2";
-            this.itemDB[ pocketsInventory ]._props.Slots[ 0 ]._props.filters[ 0 ].Filter.push( flaregunID );
-            this.itemDB[ pocketsInventory ]._props.Slots[ 1 ]._props.filters[ 0 ].Filter.push( flaregunID );
-            this.itemDB[ pocketsInventory ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter.push( flaregunID );
+            for( const questID of this.config.quests )
+            {
+                delete this.questConfig.eventQuests[questID];
+            }
+            this.inventoryConfig.randomLootContainers["674098588466ebb03408b210"].rewardCount = 4; // CASE
+            this.inventoryConfig.randomLootContainers["674098588466ebb03408b210"].rewardTypePool = [
+                "57864c8c245977548867e7f1",
+                "54009119af1c881c07000029",
+                "57864c322459775490116fbf",
+                "57864a3d24597754843f8721",
+                "57864ee62459775490116fc1",
+                "57864e4c24597754843f8723",
+                "55818ae44bdc2dde698b456c",
+                "550aa4154bdc2dd8348b456b"
+            ];
+
+            this.inventoryConfig.randomLootContainers["674078c4a9c9adf0450d59f9"] = structuredClone( this.inventoryConfig.randomLootContainers["674098588466ebb03408b210"] );
         }
         //point output
         if ( this.config.debug )
@@ -169,6 +181,13 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
         }
     }
 
+    private m700Barrel()
+    {
+        const m700ID = "5bfea6e90db834001b7347f3";
+        const sa58barrel = "5b099a765acfc47a8607efe3";
+        this.itemDB[ m700ID ]._props.Slots[ 2 ]._props.filters[ 0 ].Filter.push( sa58barrel );
+    }
+
     private suppressorErgoAdjustment()
     {
         const suppressorParent = "550aa4cd4bdc2dd8348b456c";
@@ -179,51 +198,6 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
             {
                 this.itemDB[ item ]._props.Ergonomics += this.config.suppressorErgoAdjustment;
             }
-        }
-    }
-
-    private scavgingynerf( tables: IDatabaseTables )
-    {
-        this.printColor( "[TreasureBox] Gingy on Scavs spawn rate nerf", LogTextColor.CYAN );
-        const sscav = tables.bots.types.marksman;
-        const scav = tables.bots.types.assault;
-
-        const gingyID = "62a09d3bcf4a99369e262447";
-
-        //random junk item array
-        const items = [
-            "575062b524597720a31c09a1",
-            "57347d3d245977448f7b7f61",
-            "5751487e245977207e26a315",
-            "5448ff904bdc2d6f028b456e",
-            "57347d692459774491567cf1",
-            "544fb6cc4bdc2d34748b456e",
-            "544fb37f4bdc2dee738b4567",
-            "5af0454c86f7746bf20992e8",
-            "5755356824597772cb798962",
-            "5751a25924597722c463c472",
-            "5e831507ea0a7c419c2f9bd9",
-            "544fb25a4bdc2dfb738b4567",
-            "60098af40accd37ef2175f27",
-            "5e8488fa988a8701445df1e4",
-            "544fb3364bdc2d34748b456a",
-            "5672cb124bdc2d1a0f8b4568",
-            "5710c24ad2720bc3458b45a3",
-            "57347c1124597737fb1379e3",
-            "5d1b313086f77425227d1678",
-            "57347c5b245977448d35f6e1",
-            "5734795124597738002c6176",
-            "57347c77245977448d35f6e2",
-            "5448be9a4bdc2dfd2f8b456a",
-        ];
-
-        //Reduce weighting of it on regular scavs
-        scav.inventory.items.Pockets[ gingyID ] *= 0.1;
-
-        //Fill the pockets of sniper scavs with junk stuff
-        for ( const entry of items )
-        {
-            sscav.inventory.items.Pockets[ entry ] = 50;
         }
     }
 
@@ -393,7 +367,7 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
         //const newName = this.itemDB[weapon]._name;
         const newName = newLocaleName;
         const price = 25000;
-        const newID = `${ m4drumID }45mod`;
+        const newID = `6773b8832c3a1a1c5e32af68`;
 
         const leaves45: NewItemFromCloneDetails = {
             itemTplToClone: m4drumID,
@@ -456,7 +430,7 @@ class TreasureBox implements IPostDBLoadMod, IPreSptLoadMod
             };
 
             // Create item object
-            const itemToAdd: Item = {
+            const itemToAdd: IItem = {
                 _id: item._id,
                 _tpl: item._id,
                 parentId: "hideout",

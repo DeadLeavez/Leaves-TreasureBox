@@ -35,6 +35,8 @@ interface IConfig {
   shturmanKeyBuff: boolean;
   disableCoopReward: boolean;
   disableFenceRepReward: boolean;
+  enableQuests:boolean;
+  quests:string[];
 }
 
 interface LevelRange {

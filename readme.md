@@ -46,3 +46,8 @@ Added the following options
 ## 1.2.0
 Added the following options
 - Disable coop extract rewards.
+
+## 1.2.1
+- 3.10 update
+- Removed some outdated stuff
+- Added new options.
